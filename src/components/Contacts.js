@@ -17,7 +17,7 @@ class Contacts extends Component {
 
   async componentDidMount() {
     try {
-      const { data } = await axios.get(`https://shop-7319e-default-rtdb.firebaseio.com/contacts.json`);
+      const { data } = await axios.get(`https://phonebook-3ae5c-default-rtdb.firebaseio.com/contacts.json`);
 
       if (data) {
         const contacts = Object.keys(data).map(key => ({ id: key, ...data[key] }));
@@ -30,7 +30,7 @@ class Contacts extends Component {
 
   addContact = async contact => {
     try {
-      const { data } = await axios.post(`https://shop-7319e-default-rtdb.firebaseio.com/contacts.json`, contact);
+      const { data } = await axios.post(`https://phonebook-3ae5c-default-rtdb.firebaseio.com/contacts.json`, contact);
       this.props.addContact({ ...contact, id: data.name });
       console.log(data);
     } catch (error) {}
@@ -39,7 +39,7 @@ class Contacts extends Component {
   onDeleteContact = async e => {
     try {
       const { id } = e.target;
-      await axios.delete(`https://shop-7319e-default-rtdb.firebaseio.com/contacts/${id}.json`);
+      await axios.delete(`https://phonebook-3ae5c-default-rtdb.firebaseio.com/contacts/${id}.json`);
       this.props.deleteContact(id);
     } catch (error) {}
   };
@@ -48,15 +48,15 @@ class Contacts extends Component {
     return this.props.contacts.some(contact => contact.name === name);
   };
 
-  setFilter = e => {
+  setFilter = (e) => {
     const { value } = e.target;
     this.props.filterContacts(value);
   };
 
   getFilteredClients = () => {
-    console.log(this.props);
     return this.props.contacts.filter(contact => contact.name.toLowerCase().includes(this.props.filter.toLowerCase()));
   };
+
   render() {
     return (
       <>
@@ -69,11 +69,7 @@ class Contacts extends Component {
         </Section>
 
         <Section title="Contacts">
-          <ContactsList
-            contacts={this.props.contacts}
-            onDeleteContact={this.onDeleteContact}
-            contacts={this.getFilteredClients()}
-          />
+          <ContactsList onDeleteContact={this.onDeleteContact} contacts={this.getFilteredClients()} />
         </Section>
       </>
     );
